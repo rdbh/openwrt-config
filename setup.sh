@@ -6,6 +6,6 @@ opkg install tmux python git nano
 
 git clone git://github.com/radawson/py-kms
 cd py-kms
-./install.sh
+sh install.sh
 
 # TODO: Add https redirect
