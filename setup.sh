@@ -2,7 +2,7 @@
 # Script for setting up a new OpenWRT device
 
 opkg update
-opkg install tmux python git
+opkg install tmux python git nano
 
 git clone https://github.com/radawson/py-kms
 cd py-kms
