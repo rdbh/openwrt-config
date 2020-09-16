@@ -9,8 +9,8 @@ cd py-kms
 sh install.sh
 
 # Pull openssl modification 
-HTTP_MOD=`curl https://raw.githubusercontent.com/rdbh/openwrt-config/master/config.txt`
-echo $HTTP_MOD >> /etc/lighttpd/conf.d/30-openssl.conf
+wget wget https://raw.githubusercontent.com/rdbh/openwrt-config/master/config.txt
+cat config.txt >> /etc/lighttpd/conf.d/30-openssl.conf
 
- # Restart the service
- /etc/init.d/lighttpd restart
+# Restart the service
+/etc/init.d/lighttpd restart
