@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # Script for setting up a new OpenWRT device
 
 opkg update
