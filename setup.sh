@@ -12,5 +12,8 @@ sh install.sh
 wget wget https://raw.githubusercontent.com/rdbh/openwrt-config/master/config.txt
 cat config.txt >> /etc/lighttpd/conf.d/30-openssl.conf
 
+# Clean up config.txt
+rm config.txt
+
 # Restart the service
 /etc/init.d/lighttpd restart
