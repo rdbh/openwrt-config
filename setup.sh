@@ -9,7 +9,7 @@ cd py-kms
 sh install.sh
 
 # Pull openssl modification 
-wget wget https://raw.githubusercontent.com/rdbh/openwrt-config/master/config.txt
+wget https://raw.githubusercontent.com/rdbh/openwrt-config/master/config.txt
 cat config.txt >> /etc/lighttpd/conf.d/30-openssl.conf
 
 # Clean up config.txt
