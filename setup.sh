@@ -8,4 +8,12 @@ git clone git://github.com/radawson/py-kms
 cd py-kms
 sh install.sh
 
-# TODO: Add https redirect
+# Pull openssl modification 
+wget https://raw.githubusercontent.com/rdbh/openwrt-config/master/config.txt
+cat config.txt >> /etc/lighttpd/conf.d/30-openssl.conf
+
+# Clean up config.txt
+rm config.txt
+
+# Restart the service
+/etc/init.d/lighttpd restart
