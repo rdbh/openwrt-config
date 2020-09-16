@@ -1,5 +1,5 @@
-else $HTTP[“scheme”] == “http” {
-$HTTP[“host”] =~ “." {
-url.redirect = (".” => “https://%0$0”)
-}
+ else $HTTP["scheme"] == "http" {
+    $HTTP["host"] =~ ".*" {
+        url.redirect = (".*" => "https://%0$0")
+    }
 }
