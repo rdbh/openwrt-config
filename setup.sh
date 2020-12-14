@@ -8,29 +8,29 @@ set -e
 
 printf "\nStep 1 - Updating Repository\n\n"
 opkg update
-printf "Step 2 - software installation\n"
-printf "\tStep 2a - Installing tmux\n"
+printf "\nStep 2 - software installation\n"
+printf "\n\tStep 2a - Installing tmux\n"
 opkg install tmux
-printf "\tStep 2b - Installing python 2.7\n"
-opkg install python-light
-printf "\tStep 2c - Installing git\n"
+printf "\n\tStep 2b - Installing python 2.7\n"
+opkg install python
+printf "\n\tStep 2c - Installing git\n"
 opkg install git
 # 0.2.2 removed nano to save space and simplify install
 # printf "Step 2d - Installing nano"
 # opkg install nano
 
 printf "\nStep 3 - Installing py-kms\n\n"
-printf "\tStep 3a - cloning repository\n"
+printf "\n\tStep 3a - Cloning repository\n"
 git clone git://github.com/radawson/py-kms
-printf "\tStep 3b - Transitioning to py-kms install script\n"
+printf "\n\tStep 3b - Transitioning to py-kms install script\n"
 cd py-kms
 sh install.sh
 
 # Pull openssl modification 
 printf "\nStep 4 - Installing http redirect\n\n"
-printf "\tStep 4a - Installing lighttpd-mod-redirect\n"
+printf "\n\tStep 4a - Installing lighttpd-mod-redirect\n"
 opkg install lighttpd-mod-redirect
-printf "\tStep 4b - Modifying 30-openssl.conf\n"
+printf "\n\tStep 4b - Modifying 30-openssl.conf\n"
 wget https://raw.githubusercontent.com/rdbh/openwrt-config/master/config.txt
 cat config.txt >> /etc/lighttpd/conf.d/30-openssl.conf
 
