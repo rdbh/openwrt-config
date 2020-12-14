@@ -9,7 +9,7 @@ echo "Step 2 - software installation\n"
 echo "\tStep 2a - Installing tmux\n"
 opkg install tmux
 echo "\tStep 2b - Installing python 2.7\n"
-opkg install python
+opkg install python-light
 echo "\tStep 2c - Installing git\n"
 opkg install git
 echo "\tStep 2d - Installing nano\n"
