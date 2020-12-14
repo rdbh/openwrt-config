@@ -1,5 +1,7 @@
 #!/bin/sh
 # Script for setting up a new OpenWRT device
+# Copyright 2020 R Dawson
+# v0.2.1
 
 echo "\nStep 1 - Updating Repository\n\n"
 opkg update
