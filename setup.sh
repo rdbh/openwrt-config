@@ -1,39 +1,51 @@
 #!/bin/sh
 # Script for setting up a new OpenWRT device
 # Copyright 2020 R Dawson
-# v0.2.1
+# v0.2.2
 
-echo "\nStep 1 - Updating Repository\n\n"
+# Exit on errors
+set -e
+
+# keep track of the last executed command
+trap 'last_command=$current_command; current_command=$BASH_COMMAND' DEBUG
+# echo an error message before exiting
+trap 'echo "\"${last_command}\" command filed with exit code $?."' EXIT
+
+printf "\nStep 1 - Updating Repository\n\n"
 opkg update
-echo "Step 2 - software installation\n"
-echo "\tStep 2a - Installing tmux\n"
+printf "Step 2 - software installation\n"
+printf "\tStep 2a - Installing tmux\n"
 opkg install tmux
-echo "\tStep 2b - Installing python 2.7\n"
+printf "\tStep 2b - Installing python 2.7\n"
 opkg install python-light
-echo "\tStep 2c - Installing git\n"
+printf "\tStep 2c - Installing git\n"
 opkg install git
-echo "\tStep 2d - Installing nano\n"
-opkg install nano
+# 0.2.2 removed nano to save space and simplify install
+# printf "Step 2d - Installing nano"
+# opkg install nano
 
-echo "\nStep 3 - Installing py-kms\n"
-echo "\tStep 3a - cloning repository\n"
+printf "\nStep 3 - Installing py-kms\n\n"
+printf "\tStep 3a - cloning repository\n"
 git clone git://github.com/radawson/py-kms
-echo "\tStep 3b - Transitioning to py-kms install script\n"
+printf "\tStep 3b - Transitioning to py-kms install script\n"
 cd py-kms
 sh install.sh
 
 # Pull openssl modification 
-echo "\nStep 4 - Installing http redirect\n"
-echo "\tStep 4a - Installing lighttpd-mod-redirect\n"
+printf "\nStep 4 - Installing http redirect\n\n"
+printf "\tStep 4a - Installing lighttpd-mod-redirect\n"
 opkg install lighttpd-mod-redirect
-echo "\tStep 4b - Modifying 30-openssl.conf\n"
+printf "\tStep 4b - Modifying 30-openssl.conf\n"
 wget https://raw.githubusercontent.com/rdbh/openwrt-config/master/config.txt
 cat config.txt >> /etc/lighttpd/conf.d/30-openssl.conf
 
 # Clean up config.txt
-echo "\tStep 4c - Removing temporary files\n"
+printf "\tStep 4c - Removing temporary files\n"
 rm config.txt
 
 # Restart the service
-echo "\tStep 4d - Restarting http service\n"
+printf "\tStep 4d - Restarting http service\n"
 /etc/init.d/lighttpd restart
+
+# Completion Message
+printf "Installation Complete"
