@@ -40,11 +40,12 @@ wget https://raw.githubusercontent.com/rdbh/openwrt-config/master/config.txt
 cat config.txt >> /etc/lighttpd/conf.d/30-openssl.conf
 
 # Clean up config.txt
-printf "\tStep 4c - Removing temporary files\n"
+printf "\nStep 5 - Removing temporary files\n"
 rm config.txt
+sed -i -e "/^\/root/d" /etc/sysupgrade.conf
 
 # Restart the service
-printf "\tStep 4d - Restarting http service\n"
+printf "\nStep 6 - Restarting http service\n"
 /etc/init.d/lighttpd restart
 
 # Completion Message
