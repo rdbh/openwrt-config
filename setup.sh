@@ -1,15 +1,10 @@
 #!/bin/sh
 # Script for setting up a new OpenWRT device
 # Copyright 2020 R Dawson
-# v0.2.2
+# v0.2.3
 
 # Exit on errors
 set -e
-
-# keep track of the last executed command
-trap 'last_command=$current_command; current_command=$BASH_COMMAND' DEBUG
-# echo an error message before exiting
-trap 'echo "\"${last_command}\" command filed with exit code $?."' EXIT
 
 printf "\nStep 1 - Updating Repository\n\n"
 opkg update
