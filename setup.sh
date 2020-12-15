@@ -12,7 +12,7 @@ printf "\nStep 2 - software installation\n"
 printf "\n\tStep 2a - Installing tmux\n"
 opkg install tmux
 printf "\n\tStep 2b - Installing python 2.7\n"
-opkg install python
+opkg install python3-light
 printf "\n\tStep 2c - Installing git\n"
 opkg install git
 # 0.2.2 removed nano to save space and simplify install
@@ -21,7 +21,7 @@ opkg install git
 
 printf "\nStep 3 - Installing py-kms\n\n"
 printf "\n\tStep 3a - Cloning repository\n"
-git clone git://github.com/radawson/py-kms
+git clone git://github.com/radawson/py-kms-1
 printf "\n\tStep 3b - Transitioning to py-kms install script\n"
 cd py-kms
 sh install.sh
@@ -44,4 +44,4 @@ printf "\nStep 6 - Restarting http service\n"
 /etc/init.d/lighttpd restart
 
 # Completion Message
-printf "Installation Complete"
+printf "Installation Complete\n\n"
