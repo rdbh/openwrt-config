@@ -11,7 +11,7 @@ opkg update
 printf "\nStep 2 - software installation\n"
 printf "\n\tStep 2a - Installing tmux\n"
 opkg install tmux
-printf "\n\tStep 2b - Installing python 2.7\n"
+printf "\n\tStep 2b - Installing python 3.x\n"
 opkg install python3-light
 printf "\n\tStep 2c - Installing git\n"
 opkg install git
@@ -23,7 +23,8 @@ printf "\nStep 3 - Installing py-kms\n\n"
 printf "\n\tStep 3a - Cloning repository\n"
 git clone git://github.com/radawson/py-kms-1
 printf "\n\tStep 3b - Transitioning to py-kms install script\n"
-cd py-kms
+cd py-kms-1
+rm -rf docker
 sh install.sh
 
 # Pull openssl modification 
