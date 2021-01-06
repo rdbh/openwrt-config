@@ -8,6 +8,7 @@ set -e
 
 printf "\nStep 1 - Updating Repository\n\n"
 opkg update
+# opkg list-upgradable | cut -f 1 -d ' ' | xargs opkg upgrade 
 printf "\nStep 2 - software installation\n"
 printf "\n\tStep 2a - Installing tmux\n"
 opkg install tmux
