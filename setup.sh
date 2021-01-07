@@ -14,7 +14,7 @@ printf "\n\tStep 2a - Installing tmux\n"
 opkg install tmux
 printf "\n\tStep 2b - Installing python 3.x\n"
 opkg install python3-light
-alias python=python3
+opkg install python3-logging
 printf "\n\tStep 2c - Installing git\n"
 opkg install git
 # 0.2.2 removed nano to save space and simplify install
