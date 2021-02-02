@@ -1,5 +1,6 @@
 #!/bin/sh
 # Script for extending an openWRT device storage
+# wget https://raw.githubusercontent.com/rdbh/openwrtconfig/master/extroot.sh
 # (C) Richard Dawson 2020
 
 # script assumes you are running as root
