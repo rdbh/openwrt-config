@@ -1,4 +1,4 @@
-#!/bin/sh 
+#!/bin/ash 
 # Script for extending an openWRT device storage 
 # wget https://raw.githubusercontent.com/rdbh/openwrt-config/master/extroot.sh 
 # (c) Richard Dawson 2020
