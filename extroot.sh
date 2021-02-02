@@ -11,13 +11,13 @@ fi
 
 # update packages and install required software
 printf "\nUpdating and installing required packages\n"
-opkg update 
-opkg install block-mount 
-opkg install kmod-fs-ext4 
-opkg install kmod-usb-storage 
-opkg install kmod-usb-ohci 
-opkg install kmod-usb-uhci 
-opkg install e2fsprogs 
+opkg update
+opkg install block-mount
+opkg install kmod-fs-ext4
+opkg install kmod-usb-storage
+opkg install kmod-usb-ohci
+opkg install kmod-usb-uhci
+opkg install e2fsprogs
 opkg install fdisk
 
 # preserve the ability to access the rootfs_data
