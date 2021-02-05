@@ -7,6 +7,9 @@
 # Exit on errors
 set -e
 
+# Set the step variable to 0 globally
+step=0
+
 #------------------------------------------------------
 # Individual Functions
 #------------------------------------------------------
@@ -18,7 +21,7 @@ printf "\nTrying to identify this device\n"
 	# Determine which device we are operating on
 	# TODO: get model information from /etc/board.json
 
-	model=$HOSTNAME
+	model="$(hostname)"
 	case $model in
 		"GL-MT1300")
 			printf "GL-MT1300 Beryl detected\n"
@@ -28,7 +31,7 @@ printf "\nTrying to identify this device\n"
 			setup_ar750;;
 		*)
 			printf "Unrecognized device %s\n" "$model"
-			read "Press [ENTER] to continue"
+			read "Press [ENTER] to continue" -r
 	esac
 }
 
@@ -42,7 +45,7 @@ expand_storage(){
 	opkg install kmod-usb-uhci
 	opkg install e2fsprogs
 	opkg install fdisk
-	step=$(expr $step + 1)
+	step=$((step + 1))
 
 	# preserve the ability to access the rootfs_data
 	printf "\nCreating access point for rootfs_data\n"
@@ -53,7 +56,7 @@ expand_storage(){
 	uci set fstab.rwm.device="${DEVICE}"
 	uci set fstab.rwm.target="/rwm"
 	uci commit fstab
-	step=$(expr $step + 1)
+	step=$((step + 1))
 	
 	# get available drives
 	printf "\nDetermine which drive is your expansion drive:\n"
@@ -62,14 +65,14 @@ expand_storage(){
 	printf "%s\n" "$mounted_blocks"
 	printf "\nType the name of the device you want to format\n"
 	printf "\tExample for \"/dev/sda1\" type \"sda1\"\n"
-	read mount_drive
+	read -r mount_drive
 	printf "WARNING: you are about to format /dev/%s\n" "$mount_drive"
-	read -p "Enter Y to format drive: " -r ans1
+	read "Enter Y to format drive: " -r ans1
 
 	if [[ "$ans1" == "Y" || "$ans1" == "y" ]]; then
-		mkfs.ext4 -F /dev/$mount_drive
+		mkfs.ext4 -F /dev/"$mount_drive"
 	fi
-	step=$(expr $step + 1)
+	step=$((step + 1))
 
 	# Add the external drive to the overlay
 	printf "\nAdding %s to the overlay\n" "$mount_drive"
@@ -81,19 +84,19 @@ expand_storage(){
 	uci set fstab.overlay.target="/overlay"
 	uci set fstab.@global[0].delay_root="15"
 	uci commit fstab
-	step=$(expr $step + 1)
+	step=$((step + 1))
 
 	# Copy the current overlay into the new drive
 	printf "\nCopying the current rootfs to the new drive overlay\n"
-	mount -t ext4 /dev/$mount_drive /mnt 
+	mount -t ext4 /dev/"$mount_drive" /mnt 
 	cp -f -a /overlay/. /mnt
 	umount /mnt
-	step=$(expr $step + 1)
+	step=$((step + 1))
 
 	# Reboot
 	printf "\nCheck the preceding text for errors, and troubleshoot as necessary\n"
 	printf "\nCtrl-C (^C) will terminate the script without rebooting\n"
-	read -p "Otherwise, press [ENTER] to reboot" -r ans2
+	read "Otherwise, press [ENTER] to reboot"
 	reboot
 }
 
@@ -108,7 +111,7 @@ force_https(){
 	# Restart the http service
 	printf "\nStep %sc - Restarting http service\n" "$step"
 	/etc/init.d/lighttpd restart
-	step=$(expr $step + 1)
+	step=$((step + 1))
 }
 
 full_upgrade(){
@@ -116,20 +119,20 @@ full_upgrade(){
 	# this should only be done if you are willing to troubleshoot
 	# this is equivalent to apt upgrade
 	opkg list-upgradable | cut -f 1 -d ' ' | xargs opkg upgrade 
-	step=$(expr $step + 1)
+	step=$((step + 1))
 }
 
 install_git(){
 	printf "\nStep %s - Installing git\n" "$step"
 	opkg install git
 	opkg install git-http
-	step=$(expr $step + 1)
+	step=$((step + 1))
 }
 
 install_nano(){
 	printf "\nStep %s - Installing nano" "$step"
 	opkg install nano
-	step=$(expr $step + 1)
+	step=$((step + 1))
 }
 
 install_python(){
@@ -140,7 +143,7 @@ install_python(){
 	opkg install python3-logging
 	opkg install python3-xml
 	opkg install python3-multiprocessing
-	step=$(expr $step + 1)
+	step=$((step + 1))
 }
 
 install_pykms(){
@@ -151,13 +154,13 @@ install_pykms(){
 	cd py-kms-1
 	rm -rf docker
 	sh install.sh
-	step=$(expr $step + 1)
+	step=$((step + 1))
 }
 
 install_tmux(){
 	printf "\nStep %s - Installing tmux\n" "$step"
 	opkg install tmux
-	step=$(expr $step + 1)
+	step=$((step + 1))
 }
 
 install_usb3(){
@@ -165,7 +168,7 @@ install_usb3(){
 	printf "\nStep %s - Installing drivers for file sharing\n" "$step"
 	opkg install e2fsprogs
 	opkg install kmod-usb3
-	step=$(expr $step + 1)
+	step=$((step + 1))
 }
 
 clean_up(){
@@ -174,13 +177,13 @@ clean_up(){
 	rm config.txt
 	# (0.2.4) add root directory to reset cleanup
 	sed -i -e "/^\/root/d" /etc/sysupgrade.conf
-	step=$(expr $step + 1)
+	step=$((step + 1))
 }
 
 update_opkg(){
 	printf "\nStep %s - Updating Repository\n\n" "$step"
 	opkg update
-	step=$(expr $step + 1)
+	step=$((step + 1))
 	printf "Package repository update complete"
 }
 
@@ -270,7 +273,7 @@ fi
 while :
 do
 	run_menu
-	read answer
+	read -r answer
 	MSG=""
 	case $answer in
 		a|A) apick;;
