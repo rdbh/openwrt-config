@@ -122,6 +122,7 @@ full_upgrade(){
 install_git(){
 	printf "\nStep %s - Installing git\n" "$step"
 	opkg install git
+	opkg install git-http
 	step=`expr $step + 1`
 }
 
