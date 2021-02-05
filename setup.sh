@@ -1,5 +1,6 @@
 #!/bin/sh
 # Script for setting up a new OpenWRT device
+# wget https://raw.githubusercontent.com/rdbh/openwrt-config/master/setup.sh 
 # Copyright 2020, 2021 Richard Dawson
 # v0.3.1
 
@@ -9,25 +10,26 @@ set -e
 #------------------------------------------------------
 # Individual Functions
 #------------------------------------------------------
+
 autoinstall_device(){
 clear
 printf "\nTrying to identify this device\n"
 
-# Determine which device we are operating on
-# TODO: get model information from /etc/board.json
+	# Determine which device we are operating on
+	# TODO: get model information from /etc/board.json
 
-model=$HOSTNAME
-case $model in
-	"GL-MT1300")
-		printf "GL-MT1300 Beryl detected\n"
-		setup_mt1300;;
-	"GL-AR750"|"GL-AR750S")
-		printf "GL-AR750 Slate detected\n"
-		setup_ar750;;
-	*)
-		printf "Unrecognized device %s\n" "$HOSTNAME"
-		read "Press [ENTER] to continue"
-esac
+	model=$HOSTNAME
+	case $model in
+		"GL-MT1300")
+			printf "GL-MT1300 Beryl detected\n"
+			setup_mt1300;;
+		"GL-AR750"|"GL-AR750S")
+			printf "GL-AR750 Slate detected\n"
+			setup_ar750;;
+		*)
+			printf "Unrecognized device %s\n" "$HOSTNAME"
+			read "Press [ENTER] to continue"
+	esac
 }
 
 expand_storage(){
@@ -234,26 +236,26 @@ fpick() { step=1 ; update_opkg ; force_https }
 # DISPLAY MENU
 #------------------------------------------------------
 
-run_menu() {
-# Displays the menu options
-clear
-printf `date`
-printf
-printf "\t\t\tRouter Update Menu"
-printf
-printf "\t\tPlease Select:"
-printf
-printf "\t\t\t%s" "$amenu"
-printf "\t\t\t%s" "$bmenu"
-printf "\t\t\t%s" "$cmenu"
-printf "\t\t\t%s" "$dmenu"
-printf "\t\t\t%s" "$emenu"
-printf "\t\t\t%s" "$fmenu"
-printf "\t\t\tx. Exit"
-printf
-printf $MSG
-printf
-printf Select by pressing the letter and then ENTER ;
+run_menu(){
+	# Displays the menu options
+	clear
+	printf `date`
+	printf
+	printf "\t\t\tRouter Update Menu"
+	printf
+	printf "\t\tPlease Select:"
+	printf
+	printf "\t\t\t%s" "$amenu"
+	printf "\t\t\t%s" "$bmenu"
+	printf "\t\t\t%s" "$cmenu"
+	printf "\t\t\t%s" "$dmenu"
+	printf "\t\t\t%s" "$emenu"
+	printf "\t\t\t%s" "$fmenu"
+	printf "\t\t\tx. Exit"
+	printf
+	printf "$MSG"
+	printf
+	printf Select by pressing the letter and then ENTER ;
 }
 
 #------------------------------------------------------
@@ -267,7 +269,7 @@ if ! [ $(id -u) = 0 ]; then
 	exit 1 
 fi
 
-while true
+while :
 do
 	run_menu
 	read answer
