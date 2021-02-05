@@ -237,9 +237,10 @@ fpick() { step=1 ; update_opkg ; force_https ; }
 #------------------------------------------------------
 
 run_menu(){
+	now=$(date +'%m/%d/%Y')
 	# Displays the menu options
 	clear
-	printf `date`
+	printf "%s" "$now"
 	printf
 	printf "\t\t\tRouter Update Menu"
 	printf
