@@ -224,12 +224,12 @@ fmenu="f.  Force HTTPS "                 		;
 # The function loads an error message into a variable
 badchoice () { MSG="Invalid Selection ... Please Try Again" ; } 
 
-apick() { autoinstall_device }
-bpick() { step=1 ; setup_ar750 }
-cpick() { step=1 ; setup_mt1300 }
-dpick() { step=1 ; update_opkg ; expand_storage }
-epick() { step=1 ; update_opkg ; install_pykms }
-fpick() { step=1 ; update_opkg ; force_https }
+apick() { autoinstall_device ; }
+bpick() { step=1 ; setup_ar750 ; }
+cpick() { step=1 ; setup_mt1300 ; }
+dpick() { step=1 ; update_opkg ; expand_storage ; }
+epick() { step=1 ; update_opkg ; install_pykms ; }
+fpick() { step=1 ; update_opkg ; force_https ; }
 
  
 #------------------------------------------------------
@@ -255,7 +255,7 @@ run_menu(){
 	printf
 	printf "$MSG"
 	printf
-	printf Select by pressing the letter and then ENTER ;
+	printf "Select by pressing the letter and then ENTER "
 }
 
 #------------------------------------------------------
