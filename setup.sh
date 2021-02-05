@@ -27,7 +27,7 @@ printf "\nTrying to identify this device\n"
 			printf "GL-AR750 Slate detected\n"
 			setup_ar750;;
 		*)
-			printf "Unrecognized device %s\n" "$HOSTNAME"
+			printf "Unrecognized device %s\n" "$model"
 			read "Press [ENTER] to continue"
 	esac
 }
@@ -242,22 +242,17 @@ run_menu(){
 	# Displays the menu options
 	clear
 	printf "%s" "$now"
-	printf
-	printf "\t\t\tRouter Update Menu"
-	printf
-	printf "\t\tPlease Select:"
-	printf
-	printf "\t\t\t%s" "$amenu"
-	printf "\t\t\t%s" "$bmenu"
-	printf "\t\t\t%s" "$cmenu"
-	printf "\t\t\t%s" "$dmenu"
-	printf "\t\t\t%s" "$emenu"
-	printf "\t\t\t%s" "$fmenu"
-	printf "\t\t\tx. Exit"
-	printf
-	printf "$MSG"
-	printf
-	printf "Select by pressing the letter and then ENTER "
+	printf "\n\t\t\tRouter Update Menu\n"
+	printf "\n\t\tPlease Select:\n"
+	printf "\n\t\t\t%s" "$amenu"
+	printf "\n\t\t\t%s" "$bmenu"
+	printf "\n\t\t\t%s" "$cmenu"
+	printf "\n\t\t\t%s" "$dmenu"
+	printf "\n\t\t\t%s" "$emenu"
+	printf "\n\t\t\t%s" "$fmenu"
+	printf "\n\t\t\tx. Exit\n"
+	printf "\n%s\n" "$MSG"
+	printf "\nSelect by pressing the letter and then ENTER\n\t"
 }
 
 #------------------------------------------------------
