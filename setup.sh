@@ -26,16 +26,16 @@ printf "\nTrying to identify this device\n"
 	model="$(jq '.model.id' /etc/board.json | sed -e 's/^"//' -e 's/"$//')"
 	case $model in
 		"gl-mt1300")
-			printf "GL-MT1300 Beryl detected\n"
-			read "if this is correct, enter y to continue" -r ans
+			printf "\nGL-MT1300 Beryl detected\n"
+			read -p "\nIf this is correct, enter y to continue" -r ans
 			if [ "$ans" = "y" ] || [ "$ans" = "Y" ] ; then
 				setup_mt1300
 			else
 				return
 			fi;;
 		"gl-ar750"|"gl-ar750s")
-			printf "GL-AR750 Slate detected\n"
-			read "if this is correct, enter y to continue" -r ans
+			printf "\nGL-AR750 Slate detected\n"
+			read -p "\nIf this is correct, enter y to continue" -r ans
 			if [ "$ans" = "y" ] || [ "$ans" = "Y" ] ; then
 				setup_ar750
 			else
@@ -44,7 +44,7 @@ printf "\nTrying to identify this device\n"
 		*)
 			printf "\nUnrecognized device %s\n" "$model"
 			printf "\nSeleect model config or individual items from the menu"
-			read "Press [ENTER] to continue" -r
+			read -p "Press [ENTER] to continue" -r
 	esac
 }
 
@@ -109,7 +109,7 @@ expand_storage(){
 	# Reboot
 	printf "\nCheck the preceding text for errors, and troubleshoot as necessary\n"
 	printf "\nCtrl-C (^C) will terminate the script without rebooting\n"
-	read "Otherwise, press [ENTER] to reboot" -r
+	read -p "Otherwise, press [ENTER] to reboot" -r
 	reboot
 }
 
@@ -132,7 +132,7 @@ force_https(){
 full_upgrade(){
 	# WARNING - this can lead to unpredictable results, so   
 	# this should only be done if you are willing to troubleshoot
-	# this is equivalent to apt upgrade
+	# This is equivalent to apt upgrade
 	opkg list-upgradable | cut -f 1 -d ' ' | xargs opkg upgrade 
 	step=$((step + 1))
 }
