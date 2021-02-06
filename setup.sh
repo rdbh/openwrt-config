@@ -220,15 +220,22 @@ setup_ar750(){
 }
 
 setup_mt1300(){
-	update_opkg
-	install_git
-	install_python
-	install_pykms
-	force_https
-	install_usb3
-	clean_up
-	
-	expand_storage
+	# Check to see if the /overlay has been expanded
+	overlay_size=$(df | grep -w overlayfs: | awk ' { print $2 } ')
+	if [ $overlay_size -gt 14208 ] ; then
+		printf "\nExpanded /overlay found, installing packages\n"
+		update_opkg
+		install_git
+		install_python
+		install_pykms
+		# force_https
+		install_usb3
+		clean_up
+	else
+		printf "\nOverlay storage must be expanded before installing packages\n"
+		expand_storage
+	fi
+
 }
 
 #------------------------------------------------------
