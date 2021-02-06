@@ -21,7 +21,7 @@ printf "\nTrying to identify this device\n"
 	# Determine which device we are operating on
 	# TODO: get model information from /etc/board.json
 
-	model="$(hostname)"
+	model="$HOSTNAME"
 	case $model in
 		"GL-MT1300")
 			printf "GL-MT1300 Beryl detected\n"
@@ -111,6 +111,8 @@ force_https(){
 	# Restart the http service
 	printf "\nStep %sc - Restarting http service\n" "$step"
 	/etc/init.d/lighttpd restart
+	# Clean up config.txt
+	rm config.txt
 	step=$((step + 1))
 }
 
@@ -173,8 +175,6 @@ install_usb3(){
 
 clean_up(){
 	printf "\nStep %s - Removing temporary files\n" "$step"
-	# Clean up config.txt
-	rm config.txt
 	# (0.2.4) add root directory to reset cleanup
 	sed -i -e "/^\/root/d" /etc/sysupgrade.conf
 	step=$((step + 1))
@@ -205,6 +205,7 @@ setup_mt1300(){
 	install_git
 	install_python
 	install_pykms
+	force_https
 	install_usb3
 	clean_up
 	
@@ -229,7 +230,7 @@ fmenu="f.  Force HTTPS "                 		;
 # The function loads an error message into a variable
 badchoice () { MSG="Invalid Selection ... Please Try Again" ; } 
 
-apick() { autoinstall_device ; }
+apick() { step=1 ; autoinstall_device ; }
 bpick() { step=1 ; setup_ar750 ; }
 cpick() { step=1 ; setup_mt1300 ; }
 dpick() { step=1 ; update_opkg ; expand_storage ; }
