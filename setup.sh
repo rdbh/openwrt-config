@@ -20,16 +20,27 @@ printf "\nTrying to identify this device\n"
 
 	# Determine which device we are operating on
 	# jq needs to be installed to parse the JSON file
+	update_opkg
 	install_jq
 
 	model="$(jq '.model.id' /etc/board.json | sed -e 's/^"//' -e 's/"$//')"
 	case $model in
 		"gl-mt1300")
 			printf "GL-MT1300 Beryl detected\n"
-			setup_mt1300;;
+			read "if this is correct, enter y to continue" -r ans
+			if [ "$ans" = "y" ] || [ "$ans" = "Y" ] ; then
+				setup_mt1300
+			else
+				return
+			fi;;
 		"gl-ar750"|"gl-ar750s")
 			printf "GL-AR750 Slate detected\n"
-			setup_ar750;;
+			read "if this is correct, enter y to continue" -r ans
+			if [ "$ans" = "y" ] || [ "$ans" = "Y" ] ; then
+				setup_ar750
+			else
+				return
+			fi;;
 		*)
 			printf "\nUnrecognized device %s\n" "$model"
 			printf "\nSeleect model config or individual items from the menu"
