@@ -24,10 +24,10 @@ printf "\nTrying to identify this device\n"
 
 	model="$(jq '.model.id' /etc/board.json | sed -e 's/^"//' -e 's/"$//')"
 	case $model in
-		"GL-MT1300")
+		"gl-mt1300")
 			printf "GL-MT1300 Beryl detected\n"
 			setup_mt1300;;
-		"GL-AR750"|"GL-AR750S")
+		"gl-ar750"|"gl-ar750s")
 			printf "GL-AR750 Slate detected\n"
 			setup_ar750;;
 		*)
