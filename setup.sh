@@ -19,9 +19,10 @@ clear
 printf "\nTrying to identify this device\n"
 
 	# Determine which device we are operating on
-	# TODO: get model information from /etc/board.json
+	# jq needs to be installed to parse the JSON file
+	install_jq
 
-	model="$HOSTNAME"
+	model="$(jq '.model.id' /etc/board.json | sed -e 's/^"//' -e 's/"$//')"
 	case $model in
 		"GL-MT1300")
 			printf "GL-MT1300 Beryl detected\n"
@@ -30,7 +31,8 @@ printf "\nTrying to identify this device\n"
 			printf "GL-AR750 Slate detected\n"
 			setup_ar750;;
 		*)
-			printf "Unrecognized device %s\n" "$model"
+			printf "\nUnrecognized device %s\n" "$model"
+			printf "\nSeleect model config or individual items from the menu"
 			read "Press [ENTER] to continue" -r
 	esac
 }
@@ -128,6 +130,12 @@ install_git(){
 	printf "\nStep %s - Installing git\n" "$step"
 	opkg install git
 	opkg install git-http
+	step=$((step + 1))
+}
+
+install_jq(){
+	printf "\nStep %s - Installing jq\n" "$step"
+	opkg install jq
 	step=$((step + 1))
 }
 
