@@ -71,7 +71,7 @@ expand_storage(){
 	printf "WARNING: you are about to format /dev/%s\n" "$mount_drive"
 	read "Enter Y to format drive: " -r ans1
 
-	if [[ "$ans1" == "Y" || "$ans1" == "y" ]]; then
+	if [ "$ans1" = "Y" ] || [ "$ans1" = "y" ]; then
 		mkfs.ext4 -F /dev/"$mount_drive"
 	fi
 	step=$((step + 1))
@@ -98,7 +98,7 @@ expand_storage(){
 	# Reboot
 	printf "\nCheck the preceding text for errors, and troubleshoot as necessary\n"
 	printf "\nCtrl-C (^C) will terminate the script without rebooting\n"
-	read "Otherwise, press [ENTER] to reboot"
+	read "Otherwise, press [ENTER] to reboot" -r
 	reboot
 }
 
