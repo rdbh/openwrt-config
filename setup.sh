@@ -26,16 +26,16 @@ printf "\nTrying to identify this device\n"
 	model="$(jq '.model.id' /etc/board.json | sed -e 's/^"//' -e 's/"$//')"
 	case $model in
 		"gl-mt1300")
-			printf "\nGL-MT1300 Beryl detected\n"
-			read -p "\nIf this is correct, enter y to continue" -r ans
+			printf "\nGL-MT1300 Beryl detected\n\n"
+			read -p "If this is correct, enter y to continue" -r ans
 			if [ "$ans" = "y" ] || [ "$ans" = "Y" ] ; then
 				setup_mt1300
 			else
 				return
 			fi;;
 		"gl-ar750"|"gl-ar750s")
-			printf "\nGL-AR750 Slate detected\n"
-			read -p "\nIf this is correct, enter y to continue" -r ans
+			printf "\nGL-AR750 Slate detected\n\n"
+			read -p "If this is correct, enter y to continue" -r ans
 			if [ "$ans" = "y" ] || [ "$ans" = "Y" ] ; then
 				setup_ar750
 			else
@@ -43,7 +43,7 @@ printf "\nTrying to identify this device\n"
 			fi;;
 		*)
 			printf "\nUnrecognized device %s\n" "$model"
-			printf "\nSeleect model config or individual items from the menu"
+			printf "\nSelect model config or individual items from the menu\n\n"
 			read -p "Press [ENTER] to continue" -r
 	esac
 }
@@ -80,7 +80,7 @@ expand_storage(){
 	printf "\tExample for \"/dev/sda1\" type \"sda1\"\n"
 	read -r mount_drive
 	printf "WARNING: you are about to format /dev/%s\n" "$mount_drive"
-	read "Enter Y to format drive: " -r ans1
+	read -p "Enter Y to format drive: " -r ans1
 
 	if [ "$ans1" = "Y" ] || [ "$ans1" = "y" ]; then
 		mkfs.ext4 -F /dev/"$mount_drive"
