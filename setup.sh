@@ -27,7 +27,7 @@ printf "\nTrying to identify this device\n"
 	case $model in
 		"gl-mt1300")
 			printf "\nGL-MT1300 Beryl detected\n\n"
-			read -p "If this is correct, enter y to continue" -r ans
+			read -p "If this is correct, enter y to continue: " -r ans
 			if [ "$ans" = "y" ] || [ "$ans" = "Y" ] ; then
 				setup_mt1300
 			else
@@ -35,7 +35,7 @@ printf "\nTrying to identify this device\n"
 			fi;;
 		"gl-ar750"|"gl-ar750s")
 			printf "\nGL-AR750 Slate detected\n\n"
-			read -p "If this is correct, enter y to continue" -r ans
+			read -p "If this is correct, enter y to continue: " -r ans
 			if [ "$ans" = "y" ] || [ "$ans" = "Y" ] ; then
 				setup_ar750
 			else
@@ -43,7 +43,7 @@ printf "\nTrying to identify this device\n"
 			fi;;
 		"gl-e750")
 			printf "\nGL-E750 Mudi detected\n\n"
-			read -p "If this is correct, enter y to continue" -r ans
+			read -p "If this is correct, enter y to continue: " -r ans
 			if [ "$ans" = "y" ] || [ "$ans" = "Y" ] ; then
 				setup_ar750
 			else
@@ -231,6 +231,7 @@ setup_ar750(){
 	install_python
 	install_pykms
 	install_usb3
+	force_https
 	clean_up
 }
 
