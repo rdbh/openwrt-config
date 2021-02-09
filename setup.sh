@@ -41,6 +41,14 @@ printf "\nTrying to identify this device\n"
 			else
 				return
 			fi;;
+		"gl-e750")
+			printf "\nGL-E750 Mudi detected\n\n"
+			read -p "If this is correct, enter y to continue" -r ans
+			if [ "$ans" = "y" ] || [ "$ans" = "Y" ] ; then
+				setup_ar750
+			else
+				return
+			fi;;
 		*)
 			printf "\nUnrecognized device %s\n" "$model"
 			printf "\nSelect model config or individual items from the menu\n\n"
