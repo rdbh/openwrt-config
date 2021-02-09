@@ -52,8 +52,15 @@ printf "\nTrying to identify this device\n"
 		*)
 			printf "\nUnrecognized device %s\n" "$model"
 			printf "\nSelect model config or individual items from the menu\n\n"
-			read -p "Press [ENTER] to continue" -r
+			pause
 	esac
+}
+
+clean_up(){
+	printf "\nStep %s - Removing temporary files\n" "$step"
+	# (0.2.4) add root directory to reset cleanup
+	sed -i -e "/^\/root/d" /etc/sysupgrade.conf
+	step=$((step + 1))
 }
 
 expand_storage(){
@@ -207,11 +214,9 @@ install_usb3(){
 	step=$((step + 1))
 }
 
-clean_up(){
-	printf "\nStep %s - Removing temporary files\n" "$step"
-	# (0.2.4) add root directory to reset cleanup
-	sed -i -e "/^\/root/d" /etc/sysupgrade.conf
-	step=$((step + 1))
+pause() {
+	printf "\n\n\tPress [ENTER] to continue\n"
+	read -r cont
 }
 
 update_opkg(){
@@ -272,12 +277,12 @@ fmenu="f.  Force HTTPS "                 		;
 # The function loads an error message into a variable
 badchoice () { MSG="Invalid Selection ... Please Try Again" ; } 
 
-apick() { step=1 ; autoinstall_device ; }
-bpick() { step=1 ; setup_ar750 ; }
-cpick() { step=1 ; setup_mt1300 ; }
-dpick() { step=1 ; update_opkg ; expand_storage ; }
-epick() { step=1 ; update_opkg ; install_pykms ; }
-fpick() { step=1 ; update_opkg ; force_https ; }
+apick() { step=1 ; autoinstall_device ; pause ;}
+bpick() { step=1 ; setup_ar750 ; pause ; }
+cpick() { step=1 ; setup_mt1300 ; pause ; }
+dpick() { step=1 ; update_opkg ; expand_storage ; pause ; }
+epick() { step=1 ; update_opkg ; install_pykms ; pause ; }
+fpick() { step=1 ; update_opkg ; force_https ; pause ; }
 
  
 #------------------------------------------------------
