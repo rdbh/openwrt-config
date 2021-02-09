@@ -214,6 +214,12 @@ install_usb3(){
 	step=$((step + 1))
 }
 
+install_utilities(){
+	install_git
+	install_nano
+	install_tmux
+}
+
 pause() {
 	printf "\n\n\tPress [ENTER] to continue\n"
 	read -r cont
@@ -268,6 +274,7 @@ cmenu="c.  Install for MT-1300 "    			;
 dmenu="d.  Expand Memory "                 		;
 emenu="e.  Install KMS Server "                 ;
 fmenu="f.  Force HTTPS "                 		;
+gmenu="g.  Install Utilities "                 	;
  
 #------------------------------------------------------
 # MENU FUNCTION DEFINITIONS
@@ -283,7 +290,7 @@ cpick() { step=1 ; setup_mt1300 ; pause ; }
 dpick() { step=1 ; update_opkg ; expand_storage ; pause ; }
 epick() { step=1 ; update_opkg ; install_pykms ; pause ; }
 fpick() { step=1 ; update_opkg ; force_https ; pause ; }
-
+gpick() { step=1 ; update_opkg ; install_utilities ; pause ; }
  
 #------------------------------------------------------
 # DISPLAY MENU
@@ -302,6 +309,8 @@ run_menu(){
 	printf "\n\t\t\t%s" "$dmenu"
 	printf "\n\t\t\t%s" "$emenu"
 	printf "\n\t\t\t%s" "$fmenu"
+	printf "\n\t\t\t%s" "$gmenu"
+	printf "\n"
 	printf "\n\t\t\tx. Exit\n"
 	printf "\n%s\n" "$MSG"
 	printf "\nSelect by pressing the letter and then ENTER\n\t"
