@@ -339,6 +339,7 @@ do
 		d|D) dpick;;
 		e|E) epick;;
 		f|F) fpick;;
+		g|G) gpick;;
 		x|X) break;;
 		*) badchoice;;
 	esac
