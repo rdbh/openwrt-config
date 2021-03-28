@@ -49,6 +49,14 @@ printf "\nTrying to identify this device\n"
 			else
 				return
 			fi;;
+		"gl-mv1000")
+			printf "\nGL-MV1000 (Marvell) detected\n\n"
+			read -p "If this is correct, enter y to continue: " -r ans
+			if [ "$ans" = "y" ] || [ "$ans" = "Y" ] ; then
+				setup_mv1000
+			else
+				return
+			fi;;
 		*)
 			printf "\nUnrecognized device %s\n" "$model"
 			printf "\nSelect model config or individual items from the menu\n\n"
@@ -246,6 +254,16 @@ setup_ar750(){
 	clean_up
 }
 
+setup_mv1000(){
+	update_opkg
+	install_git
+	install_python
+	install_pykms
+	install_usb3
+	force_https
+	clean_up
+}
+
 setup_mt1300(){
 	# Check to see if the /overlay has been expanded
 	overlay_size=$(df | grep -w overlayfs: | awk ' { print $2 } ')
@@ -269,12 +287,13 @@ setup_mt1300(){
 # MENU PROMPTS
 #------------------------------------------------------
 amenu="a.  Automatic Install "                	;
-bmenu="b.  Install for AR-750 "        			; 
-cmenu="c.  Install for MT-1300 "    			; 
-dmenu="d.  Expand Memory "                 		;
-emenu="e.  Install KMS Server "                 ;
-fmenu="f.  Force HTTPS "                 		;
-gmenu="g.  Install Utilities "                 	;
+bmenu="b.  Expand Memory "                 		;
+cmenu="c.  Install KMS Server "                 ;
+dmenu="d.  Force HTTPS "                 		;
+emenu="e.  Install Utilities "                 	;
+fmenu="f.  Install for AR-750 "        			; 
+gmenu="g.  Install for MT-1300 "    			; 
+hmenu="h.  Install for MV-1000 "    			;
  
 #------------------------------------------------------
 # MENU FUNCTION DEFINITIONS
@@ -285,12 +304,13 @@ gmenu="g.  Install Utilities "                 	;
 badchoice () { MSG="Invalid Selection ... Please Try Again" ; } 
 
 apick() { step=1 ; autoinstall_device ; pause ;}
-bpick() { step=1 ; setup_ar750 ; pause ; }
-cpick() { step=1 ; setup_mt1300 ; pause ; }
-dpick() { step=1 ; update_opkg ; expand_storage ; pause ; }
-epick() { step=1 ; update_opkg ; install_pykms ; pause ; }
-fpick() { step=1 ; update_opkg ; force_https ; pause ; }
-gpick() { step=1 ; update_opkg ; install_utilities ; pause ; }
+bpick() { step=1 ; update_opkg ; expand_storage ; pause ; }
+cpick() { step=1 ; update_opkg ; install_pykms ; pause ; }
+dpick() { step=1 ; update_opkg ; force_https ; pause ; }
+epick() { step=1 ; update_opkg ; install_utilities ; pause ; }
+fpick() { step=1 ; setup_ar750 ; pause ; }
+gpick() { step=1 ; setup_mt1300 ; pause ; }
+hpick() { step=1 ; setup_mv1300 ; pause ; }
  
 #------------------------------------------------------
 # DISPLAY MENU
@@ -310,6 +330,7 @@ run_menu(){
 	printf "\n\t\t\t%s" "$emenu"
 	printf "\n\t\t\t%s" "$fmenu"
 	printf "\n\t\t\t%s" "$gmenu"
+	printf "\n\t\t\t%s" "$hmenu"
 	printf "\n"
 	printf "\n\t\t\tx. Exit\n"
 	printf "\n%s\n" "$MSG"
@@ -340,6 +361,7 @@ do
 		e|E) epick;;
 		f|F) fpick;;
 		g|G) gpick;;
+		h|H) gpick;;
 		x|X) break;;
 		*) badchoice;;
 	esac
