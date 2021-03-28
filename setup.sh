@@ -260,7 +260,6 @@ setup_mv1000(){
 	install_python
 	install_pykms
 	install_usb3
-	force_https
 	clean_up
 }
 
