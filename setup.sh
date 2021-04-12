@@ -316,7 +316,7 @@ badchoice () { MSG="Invalid Selection ... Please Try Again" ; }
 
 _1pick() { step=1 ; setup_ar750 ; pause ; }
 _2pick() { step=1 ; setup_mt1300 ; pause ; }
-_3pick() { step=1 ; setup_mv1300 ; pause ; }
+_3pick() { step=1 ; setup_mv1000 ; pause ; }
 
 apick() { step=1 ; autoinstall_device ; pause ;}
 bpick() { step=1 ; update_opkg ; expand_storage ; pause ; }
