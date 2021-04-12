@@ -268,7 +268,7 @@ setup_mv1000(){
 setup_mt1300(){
 	# Check to see if the /overlay has been expanded
 	overlay_size=$(df | grep -w overlayfs: | awk ' { print $2 } ')
-	if [ $overlay_size -gt 14208 ] ; then
+	if [ $overlay_size -gt 16000 ] ; then
 		printf "\nExpanded /overlay found, installing packages\n"
 		update_opkg
 		install_git
