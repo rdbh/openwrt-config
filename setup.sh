@@ -103,11 +103,11 @@ expand_storage(){
 	printf "\tExample for \"/dev/sda1\" type \"sda1\"\n"
 	read -r mount_drive
 	# Check if storage device is mounted
-	printf "\nChecking to see if the storage device is currentyl mounted\n\n"
+	printf "\nChecking to see if the storage device is currently mounted\n\n"
 	#TODO: make this cleaner
 	set +e
 	umount /mnt/"$mount_drive"
-	set -e	
+		
 	# Format the storage device
 	printf "WARNING: you are about to format /dev/%s\n" "$mount_drive"
 	read -p "Enter Y to format drive: " -r ans1
@@ -128,6 +128,7 @@ expand_storage(){
 	uci set fstab.@global[0].delay_root="15"
 	uci commit fstab
 	step=$((step + 1))
+	set -e
 
 	# Copy the current overlay into the new drive
 	printf "\nCopying the current rootfs to the new drive overlay\n"
