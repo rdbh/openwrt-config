@@ -2,7 +2,13 @@
 # Script for setting up a new OpenWRT device
 # wget https://raw.githubusercontent.com/rdbh/openwrt-config/master/setup.sh 
 # Copyright 2020, 2021 Richard Dawson
-# v0.3.1
+# v0.3.3
+
+# Create a log file with current date and time
+date_var=$(date +'%y%m%d-%H%M')
+file_name="${date_var}_install.log"
+
+touch $file_name
 
 # Exit on errors
 set -e
@@ -74,13 +80,13 @@ clean_up(){
 expand_storage(){
 	# Install required software
 	printf "\n\nStep %s - installing required packages\n" "$step"
-	opkg install block-mount
-	opkg install kmod-fs-ext4
-	opkg install kmod-usb-storage
-	opkg install kmod-usb-ohci
-	opkg install kmod-usb-uhci
-	opkg install e2fsprogs
-	opkg install fdisk
+	opkg install block-mount >> $file_name
+	opkg install kmod-fs-ext4 >> $file_name
+	opkg install kmod-usb-storage >> $file_name
+	opkg install kmod-usb-ohci >> $file_name
+	opkg install kmod-usb-uhci >> $file_name
+	opkg install e2fsprogs >> $file_name
+	opkg install fdisk >> $file_name
 	step=$((step + 1))
 
 	# preserve the ability to access the rootfs_data
@@ -170,20 +176,20 @@ full_upgrade(){
 
 install_git(){
 	printf "\nStep %s - Installing git\n" "$step"
-	opkg install git
-	opkg install git-http
+	opkg install git >> $file_name
+	opkg install git-http >> $file_name
 	step=$((step + 1))
 }
 
 install_jq(){
 	printf "\nStep %s - Installing jq\n" "$step"
-	opkg install jq
+	opkg install jq >> $file_name
 	step=$((step + 1))
 }
 
 install_nano(){
 	printf "\nStep %s - Installing nano" "$step"
-	opkg install nano
+	opkg install nano >> $file_name
 	step=$((step + 1))
 }
 
@@ -192,9 +198,9 @@ install_python(){
 	# (0.2.4) Install python light to save space
 	opkg install python3-light
 	# (0.2.4) The following additional libraries are required for py-kms 
-	opkg install python3-logging
-	opkg install python3-xml
-	opkg install python3-multiprocessing
+	opkg install python3-logging >> $file_name
+	opkg install python3-xml >> $file_name
+	opkg install python3-multiprocessing >> $file_name
 	step=$((step + 1))
 }
 
@@ -211,15 +217,15 @@ install_pykms(){
 
 install_tmux(){
 	printf "\nStep %s - Installing tmux\n" "$step"
-	opkg install tmux
+	opkg install tmux >> $file_name
 	step=$((step + 1))
 }
 
 install_usb3(){
 	# (0.2.4) added file drivers to make USB sharing easier	
 	printf "\nStep %s - Installing drivers for file sharing\n" "$step"
-	opkg install e2fsprogs
-	opkg install kmod-usb3
+	opkg install e2fsprogs >> $file_name
+	opkg install kmod-usb3 >> $file_name
 	step=$((step + 1))
 }
 
