@@ -50,7 +50,7 @@ printf "\nTrying to identify this device\n"
 				return
 			fi;;
 		"gl-mv1000")
-			printf "\nGL-MV1000 (Marvell) detected\n\n"
+			printf "\nGL-MV1000 (Brume) detected\n\n"
 			read -p "If this is correct, enter y to continue: " -r ans
 			if [ "$ans" = "y" ] || [ "$ans" = "Y" ] ; then
 				setup_mv1000
@@ -286,14 +286,18 @@ setup_mt1300(){
 #------------------------------------------------------
 # MENU PROMPTS
 #------------------------------------------------------
+_1menu="1.  Install for AR-750 "        			; 
+_2menu="2.  Install for MT-1300 "    			; 
+_3menu="3.  Install for MV-1000 "    			;
 amenu="a.  Automatic Install "                	;
 bmenu="b.  Expand Memory "                 		;
 cmenu="c.  Install KMS Server "                 ;
 dmenu="d.  Force HTTPS "                 		;
 emenu="e.  Install Utilities "                 	;
-fmenu="f.  Install for AR-750 "        			; 
-gmenu="g.  Install for MT-1300 "    			; 
-hmenu="h.  Install for MV-1000 "    			;
+fmenu="f.  Install Python 3 "                 	;
+gmenu="  "        			; 
+hmenu="  "    			; 
+imenu="  "    			;
  
 #------------------------------------------------------
 # MENU FUNCTION DEFINITIONS
@@ -303,14 +307,17 @@ hmenu="h.  Install for MV-1000 "    			;
 # The function loads an error message into a variable
 badchoice () { MSG="Invalid Selection ... Please Try Again" ; } 
 
+_1pick() { step=1 ; setup_ar750 ; pause ; }
+_2pick() { step=1 ; setup_mt1300 ; pause ; }
+_3pick() { step=1 ; setup_mv1300 ; pause ; }
+
 apick() { step=1 ; autoinstall_device ; pause ;}
 bpick() { step=1 ; update_opkg ; expand_storage ; pause ; }
 cpick() { step=1 ; update_opkg ; install_pykms ; pause ; }
 dpick() { step=1 ; update_opkg ; force_https ; pause ; }
 epick() { step=1 ; update_opkg ; install_utilities ; pause ; }
-fpick() { step=1 ; setup_ar750 ; pause ; }
-gpick() { step=1 ; setup_mt1300 ; pause ; }
-hpick() { step=1 ; setup_mv1300 ; pause ; }
+fpick() { step=1 ; update_opkg ; install_python ; pause ; }
+
  
 #------------------------------------------------------
 # DISPLAY MENU
@@ -323,6 +330,9 @@ run_menu(){
 	printf "%s" "$now"
 	printf "\n\t\t\tRouter Update Menu\n"
 	printf "\n\t\tPlease Select:\n"
+	printf "\n\t\t\t%s" "$_1menu"
+	printf "\n\t\t\t%s" "$_2menu"
+	printf "\n\t\t\t%s" "$_3menu"
 	printf "\n\t\t\t%s" "$amenu"
 	printf "\n\t\t\t%s" "$bmenu"
 	printf "\n\t\t\t%s" "$cmenu"
@@ -331,6 +341,7 @@ run_menu(){
 	printf "\n\t\t\t%s" "$fmenu"
 	printf "\n\t\t\t%s" "$gmenu"
 	printf "\n\t\t\t%s" "$hmenu"
+	printf "\n\t\t\t%s" "$imenu"
 	printf "\n"
 	printf "\n\t\t\tx. Exit\n"
 	printf "\n%s\n" "$MSG"
@@ -354,14 +365,17 @@ do
 	read -r answer
 	MSG=""
 	case $answer in
+		'1') _1pick;;
+		'2') _2pick;;
+		'3') _3pick;;
+		h|H) gpick;;
 		a|A) apick;;
 		b|B) bpick;;
 		c|C) cpick;;
 		d|D) dpick;;
 		e|E) epick;;
 		f|F) fpick;;
-		g|G) gpick;;
-		h|H) gpick;;
+
 		x|X) break;;
 		*) badchoice;;
 	esac
