@@ -242,7 +242,7 @@ pause() {
 
 update_opkg(){
 	printf "\nStep %s - Updating Repository\n\n" "$step"
-	opkg update
+	opkg update >> $file_name
 	step=$((step + 1))
 	printf "Package repository update complete"
 }
