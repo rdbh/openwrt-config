@@ -2,7 +2,7 @@
 # Script for setting up a new OpenWRT device
 # wget https://raw.githubusercontent.com/rdbh/openwrt-config/master/setup.sh 
 # Copyright 2020, 2021 Richard Dawson
-# v0.3.3
+# v0.3.4
 
 # Create a log file with current date and time
 date_var=$(date +'%y%m%d-%H%M')
@@ -257,7 +257,7 @@ setup_ar750(){
 	install_python
 	install_pykms
 	install_usb3
-	force_https
+	# force_https deprecated as of firmware 3.201
 	clean_up
 }
 
@@ -280,7 +280,7 @@ setup_mt1300(){
 		install_git
 		install_python
 		install_pykms
-		# force_https
+		# force_https deprecated as of firmware 3.201
 		install_usb3
 		clean_up
 	else
