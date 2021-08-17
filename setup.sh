@@ -254,6 +254,7 @@ update_opkg(){
 setup_ar750(){
 	update_opkg
 	install_git
+	install_nano
 	install_python
 	install_pykms
 	install_usb3
