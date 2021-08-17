@@ -39,7 +39,7 @@ printf "\nTrying to identify this device\n"
 			else
 				return
 			fi;;
-		"gl-ar750"|"gl-ar750s")
+		"gl-ar750"|"gl-ar750s"|"glinet,gl-ar750s-nor-nand")
 			printf "\nGL-AR750 Slate detected\n\n"
 			read -p "If this is correct, enter y to continue: " -r ans
 			if [ "$ans" = "y" ] || [ "$ans" = "Y" ] ; then
