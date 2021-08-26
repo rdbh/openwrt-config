@@ -208,19 +208,9 @@ install_python(){
 
 install_pykms(){
 	printf "\nStep %s - Installing py-kms\n\n" "$step"
-	printf "\n\tStep %sa - Adding DNS entries\n" "$step"
-	uci add dhcp srvhost
-	uci set	dhcp.@srvhost[-1].srv="_vlmcs._tcp"
-	uci set	dhcp.@srvhost[-1].target="kms.lan"
-	uci set	dhcp.@srvhost[-1].port="1688"
-	uci set	dhcp.@srvhost[-1].class="0"
-	uci set	dhcp.@srvhost[-1].weight="0"
-	uci add_list dhcp.@dnsmasq[0].address="/kms.lan/192.168.8.1"
-	uci commit dhcp
-	/etc/init.d/dnsmasq restart
-	printf "\n\tStep %sb - Cloning repository\n" "$step"
+	printf "\n\tStep %sa - Cloning repository\n" "$step"
 	git clone git://github.com/radawson/py-kms-1
-	printf "\n\tStep %sc - Transitioning to py-kms install script\n" "$step"
+	printf "\n\tStep %sb - Transitioning to py-kms install script\n" "$step"
 	cd py-kms-1
 	rm -rf docker
 	sh install.sh
