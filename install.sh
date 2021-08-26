@@ -215,7 +215,6 @@ install_pykms(){
 	uci set	dhcp.@srvhost[-1].port="1688"
 	uci set	dhcp.@srvhost[-1].class="0"
 	uci set	dhcp.@srvhost[-1].weight="0"
-	uci add_list dhcp.@dnsmasq[0].address="/kms.lan/192.168.8.1"
 	uci commit dhcp
 	/etc/init.d/dnsmasq restart
 	printf "\n\tStep %sb - Cloning repository\n" "$step"
