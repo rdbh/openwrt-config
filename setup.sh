@@ -2,7 +2,13 @@
 # Script for setting up a new OpenWRT device
 # wget https://raw.githubusercontent.com/rdbh/openwrt-config/master/setup.sh 
 # Copyright 2020, 2021 Richard Dawson
-# v0.3.1
+# v0.3.4
+
+# Create a log file with current date and time
+date_var=$(date +'%y%m%d-%H%M')
+file_name="${date_var}_install.log"
+
+touch $file_name
 
 # Exit on errors
 set -e
@@ -33,7 +39,7 @@ printf "\nTrying to identify this device\n"
 			else
 				return
 			fi;;
-		"gl-ar750"|"gl-ar750s")
+		"gl-ar750"|"gl-ar750s"|"glinet,gl-ar750s-nor-nand")
 			printf "\nGL-AR750 Slate detected\n\n"
 			read -p "If this is correct, enter y to continue: " -r ans
 			if [ "$ans" = "y" ] || [ "$ans" = "Y" ] ; then
@@ -50,7 +56,7 @@ printf "\nTrying to identify this device\n"
 				return
 			fi;;
 		"gl-mv1000")
-			printf "\nGL-MV1000 (Marvell) detected\n\n"
+			printf "\nGL-MV1000 (Brume) detected\n\n"
 			read -p "If this is correct, enter y to continue: " -r ans
 			if [ "$ans" = "y" ] || [ "$ans" = "Y" ] ; then
 				setup_mv1000
@@ -74,13 +80,13 @@ clean_up(){
 expand_storage(){
 	# Install required software
 	printf "\n\nStep %s - installing required packages\n" "$step"
-	opkg install block-mount
-	opkg install kmod-fs-ext4
-	opkg install kmod-usb-storage
-	opkg install kmod-usb-ohci
-	opkg install kmod-usb-uhci
-	opkg install e2fsprogs
-	opkg install fdisk
+	opkg install block-mount >> $file_name
+	opkg install kmod-fs-ext4 >> $file_name
+	opkg install kmod-usb-storage >> $file_name
+	opkg install kmod-usb-ohci >> $file_name
+	opkg install kmod-usb-uhci >> $file_name
+	opkg install e2fsprogs >> $file_name
+	opkg install fdisk >> $file_name
 	step=$((step + 1))
 
 	# preserve the ability to access the rootfs_data
@@ -103,11 +109,11 @@ expand_storage(){
 	printf "\tExample for \"/dev/sda1\" type \"sda1\"\n"
 	read -r mount_drive
 	# Check if storage device is mounted
-	printf "\nChecking to see if the storage device is currentyl mounted\n\n"
+	printf "\nChecking to see if the storage device is currently mounted\n\n"
 	#TODO: make this cleaner
 	set +e
 	umount /mnt/"$mount_drive"
-	set -e	
+		
 	# Format the storage device
 	printf "WARNING: you are about to format /dev/%s\n" "$mount_drive"
 	read -p "Enter Y to format drive: " -r ans1
@@ -128,6 +134,7 @@ expand_storage(){
 	uci set fstab.@global[0].delay_root="15"
 	uci commit fstab
 	step=$((step + 1))
+	set -e
 
 	# Copy the current overlay into the new drive
 	printf "\nCopying the current rootfs to the new drive overlay\n"
@@ -169,20 +176,20 @@ full_upgrade(){
 
 install_git(){
 	printf "\nStep %s - Installing git\n" "$step"
-	opkg install git
-	opkg install git-http
+	opkg install git >> $file_name
+	opkg install git-http >> $file_name
 	step=$((step + 1))
 }
 
 install_jq(){
 	printf "\nStep %s - Installing jq\n" "$step"
-	opkg install jq
+	opkg install jq >> $file_name
 	step=$((step + 1))
 }
 
 install_nano(){
 	printf "\nStep %s - Installing nano" "$step"
-	opkg install nano
+	opkg install nano >> $file_name
 	step=$((step + 1))
 }
 
@@ -191,9 +198,9 @@ install_python(){
 	# (0.2.4) Install python light to save space
 	opkg install python3-light
 	# (0.2.4) The following additional libraries are required for py-kms 
-	opkg install python3-logging
-	opkg install python3-xml
-	opkg install python3-multiprocessing
+	opkg install python3-logging >> $file_name
+	opkg install python3-xml >> $file_name
+	opkg install python3-multiprocessing >> $file_name
 	step=$((step + 1))
 }
 
@@ -210,15 +217,15 @@ install_pykms(){
 
 install_tmux(){
 	printf "\nStep %s - Installing tmux\n" "$step"
-	opkg install tmux
+	opkg install tmux >> $file_name
 	step=$((step + 1))
 }
 
 install_usb3(){
 	# (0.2.4) added file drivers to make USB sharing easier	
 	printf "\nStep %s - Installing drivers for file sharing\n" "$step"
-	opkg install e2fsprogs
-	opkg install kmod-usb3
+	opkg install e2fsprogs >> $file_name
+	opkg install kmod-usb3 >> $file_name
 	step=$((step + 1))
 }
 
@@ -235,7 +242,7 @@ pause() {
 
 update_opkg(){
 	printf "\nStep %s - Updating Repository\n\n" "$step"
-	opkg update
+	opkg update >> $file_name
 	step=$((step + 1))
 	printf "Package repository update complete"
 }
@@ -247,10 +254,11 @@ update_opkg(){
 setup_ar750(){
 	update_opkg
 	install_git
+	install_nano
 	install_python
 	install_pykms
 	install_usb3
-	force_https
+	# force_https deprecated as of firmware 3.201
 	clean_up
 }
 
@@ -266,13 +274,13 @@ setup_mv1000(){
 setup_mt1300(){
 	# Check to see if the /overlay has been expanded
 	overlay_size=$(df | grep -w overlayfs: | awk ' { print $2 } ')
-	if [ $overlay_size -gt 14208 ] ; then
+	if [ $overlay_size -gt 16000 ] ; then
 		printf "\nExpanded /overlay found, installing packages\n"
 		update_opkg
 		install_git
 		install_python
 		install_pykms
-		# force_https
+		# force_https deprecated as of firmware 3.201
 		install_usb3
 		clean_up
 	else
@@ -285,14 +293,18 @@ setup_mt1300(){
 #------------------------------------------------------
 # MENU PROMPTS
 #------------------------------------------------------
+_1menu="1.  Install for AR-750 "        			; 
+_2menu="2.  Install for MT-1300 "    			; 
+_3menu="3.  Install for MV-1000 "    			;
 amenu="a.  Automatic Install "                	;
 bmenu="b.  Expand Memory "                 		;
 cmenu="c.  Install KMS Server "                 ;
 dmenu="d.  Force HTTPS "                 		;
 emenu="e.  Install Utilities "                 	;
-fmenu="f.  Install for AR-750 "        			; 
-gmenu="g.  Install for MT-1300 "    			; 
-hmenu="h.  Install for MV-1000 "    			;
+fmenu="f.  Install Python 3 "                 	;
+gmenu="  "        			; 
+hmenu="  "    			; 
+imenu="  "    			;
  
 #------------------------------------------------------
 # MENU FUNCTION DEFINITIONS
@@ -302,14 +314,17 @@ hmenu="h.  Install for MV-1000 "    			;
 # The function loads an error message into a variable
 badchoice () { MSG="Invalid Selection ... Please Try Again" ; } 
 
+_1pick() { step=1 ; setup_ar750 ; pause ; }
+_2pick() { step=1 ; setup_mt1300 ; pause ; }
+_3pick() { step=1 ; setup_mv1000 ; pause ; }
+
 apick() { step=1 ; autoinstall_device ; pause ;}
 bpick() { step=1 ; update_opkg ; expand_storage ; pause ; }
 cpick() { step=1 ; update_opkg ; install_pykms ; pause ; }
 dpick() { step=1 ; update_opkg ; force_https ; pause ; }
 epick() { step=1 ; update_opkg ; install_utilities ; pause ; }
-fpick() { step=1 ; setup_ar750 ; pause ; }
-gpick() { step=1 ; setup_mt1300 ; pause ; }
-hpick() { step=1 ; setup_mv1300 ; pause ; }
+fpick() { step=1 ; update_opkg ; install_python ; pause ; }
+
  
 #------------------------------------------------------
 # DISPLAY MENU
@@ -322,6 +337,9 @@ run_menu(){
 	printf "%s" "$now"
 	printf "\n\t\t\tRouter Update Menu\n"
 	printf "\n\t\tPlease Select:\n"
+	printf "\n\t\t\t%s" "$_1menu"
+	printf "\n\t\t\t%s" "$_2menu"
+	printf "\n\t\t\t%s" "$_3menu"
 	printf "\n\t\t\t%s" "$amenu"
 	printf "\n\t\t\t%s" "$bmenu"
 	printf "\n\t\t\t%s" "$cmenu"
@@ -330,6 +348,7 @@ run_menu(){
 	printf "\n\t\t\t%s" "$fmenu"
 	printf "\n\t\t\t%s" "$gmenu"
 	printf "\n\t\t\t%s" "$hmenu"
+	printf "\n\t\t\t%s" "$imenu"
 	printf "\n"
 	printf "\n\t\t\tx. Exit\n"
 	printf "\n%s\n" "$MSG"
@@ -353,14 +372,17 @@ do
 	read -r answer
 	MSG=""
 	case $answer in
+		'1') _1pick;;
+		'2') _2pick;;
+		'3') _3pick;;
+		h|H) gpick;;
 		a|A) apick;;
 		b|B) bpick;;
 		c|C) cpick;;
 		d|D) dpick;;
 		e|E) epick;;
 		f|F) fpick;;
-		g|G) gpick;;
-		h|H) gpick;;
+
 		x|X) break;;
 		*) badchoice;;
 	esac
