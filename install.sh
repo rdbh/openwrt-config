@@ -9,14 +9,6 @@
 date_var=$(date +'%y%m%d-%H%M')
 file_name="${date_var}_install.log"
 
-# Check to ensure script is run as root
-if [[ "${UID}" -ne 0 ]]; then
-  UNAME=$(id -un)
-  printf "This script must be run as root\nYou are currently running as ${UNAME}\n" >&2
-  exit 1
-fi
-
-
 touch $file_name
 
 # Exit on errors
@@ -34,9 +26,6 @@ clear
 printf "\nTrying to identify this device\n"
 
 	# Determine which device we are operating on
-	# jq needs to be installed to parse the JSON file
-	update_opkg
-	install_jq
 
 	model="$(grep '"id":' /etc/board.json | awk -F ': ' '{print $NF}' | awk -F '"' '{print $2}')"
 	case $model in
@@ -294,7 +283,7 @@ setup_mv1000(){
 	install_python
 	install_pykms
 	install_usb3
-	force_https
+	# force_https deprecated as of firmware 3.201
 	clean_up
 }
 
@@ -329,6 +318,7 @@ setup_usb150(){
 _1menu="1.  Install for AR-750 "        			; 
 _2menu="2.  Install for MT-1300 "    			; 
 _3menu="3.  Install for MV-1000 "    			;
+_4menu="4.  Install for MV-1000 "    			;
 amenu="a.  Automatic Install "                	;
 bmenu="b.  Expand Memory "                 		;
 cmenu="c.  Install KMS Server "                 ;
@@ -350,6 +340,7 @@ badchoice () { MSG="Invalid Selection ... Please Try Again" ; }
 _1pick() { step=1 ; setup_ar750 ; pause ; }
 _2pick() { step=1 ; setup_mt1300 ; pause ; }
 _3pick() { step=1 ; setup_mv1000 ; pause ; }
+_4pick() { step=1 ; setup_usb150 ; pause ; }
 
 apick() { step=1 ; autoinstall_device ; pause ;}
 bpick() { step=1 ; update_opkg ; expand_storage ; pause ; }
@@ -373,6 +364,7 @@ run_menu(){
 	printf "\n\t\t\t%s" "$_1menu"
 	printf "\n\t\t\t%s" "$_2menu"
 	printf "\n\t\t\t%s" "$_3menu"
+	printf "\n\t\t\t%s" "$_4menu"
 	printf "\n\t\t\t%s" "$amenu"
 	printf "\n\t\t\t%s" "$bmenu"
 	printf "\n\t\t\t%s" "$cmenu"
@@ -393,10 +385,11 @@ run_menu(){
 #------------------------------------------------------
 clear
 
-# Check to see if we are running as root 
-if ! [ $(id -u) = 0 ]; then 
-	printf "\nThis script must be run as root" 
-	exit 1 
+# Check to ensure script is run as root
+if [[ "${UID}" -ne 0 ]]; then
+  UNAME=$(id -un)
+  printf "This script must be run as root\nYou are currently running as ${UNAME}\n" >&2
+  exit 1
 fi
 
 while :
@@ -408,6 +401,7 @@ do
 		'1') _1pick;;
 		'2') _2pick;;
 		'3') _3pick;;
+		'4') _4pick;;
 		h|H) gpick;;
 		a|A) apick;;
 		b|B) bpick;;
