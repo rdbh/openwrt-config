@@ -308,8 +308,8 @@ setup_mt1300(){
 
 setup_usb150(){
 	update_opkg
-	echo "USB150 has very limited storage."
-	echo "Only installing nano for config editing"
+	printf "\nUSB150 has very limited storage.\n"
+	printf "\nOnly installing nano for config editing\n"
 	install_nano
 	clean_up
 }
