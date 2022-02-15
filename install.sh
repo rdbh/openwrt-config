@@ -9,6 +9,13 @@
 date_var=$(date +'%y%m%d-%H%M')
 file_name="${date_var}_install.log"
 
+# Check to ensure script is run as root
+if [[ "${UID}" -ne 0 ]]; then
+  UNAME=$(id -un)
+  printf "This script must be run as root\nYou are currently running as ${UNAME}\n" >&2
+  exit 1
+fi
+
 
 touch $file_name
 
@@ -31,7 +38,7 @@ printf "\nTrying to identify this device\n"
 	update_opkg
 	install_jq
 
-	model="$(jq '.model.id' /etc/board.json | sed -e 's/^"//' -e 's/"$//')"
+	model="$(grep '"id":' /etc/board.json | awk -F ': ' '{print $NF}' | awk -F '"' '{print $2}')"
 	case $model in
 		"gl-mt1300")
 			printf "\nGL-MT1300 Beryl detected\n\n"
@@ -62,6 +69,14 @@ printf "\nTrying to identify this device\n"
 			read -p "If this is correct, enter y to continue: " -r ans
 			if [ "$ans" = "y" ] || [ "$ans" = "Y" ] ; then
 				setup_mv1000
+			else
+				return
+			fi;;
+		"gl-usb150")
+			printf "\nGL-USB150 detected\n\n"
+			read -p "If this is correct, enter y to continue: " -r ans
+			if [ "$ans" = "y" ] || [ "$ans" = "Y" ] ; then
+				setup_usb150
 			else
 				return
 			fi;;
@@ -299,7 +314,13 @@ setup_mt1300(){
 		printf "\nOverlay storage must be expanded before installing packages\n"
 		expand_storage
 	fi
+}
 
+setup_usb150(){
+	update_opkg
+	install_git
+	install_nano
+	clean_up
 }
 
 #------------------------------------------------------
