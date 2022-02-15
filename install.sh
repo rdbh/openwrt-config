@@ -28,7 +28,7 @@ printf "\nTrying to identify this device\n"
 	# Determine which device we are operating on
 
 	MODEL="$(grep '"id":' /etc/board.json | awk -F ': ' '{print $NF}' \
-	| awk -F '"' '{print $2}' | sed 's/glitnet,//')"
+	| awk -F '"' '{print $2}' | sed 's/glinet,//')"
 	case $MODEL in
 		"gl-mt1300")
 			printf "\nGL-MT1300 Beryl detected\n\n"
