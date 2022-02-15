@@ -61,7 +61,7 @@ printf "\nTrying to identify this device\n"
 			else
 				return
 			fi;;
-		"gl-usb150")
+		"gl-usb150"|"glinet,gl-usb150")
 			printf "\nGL-USB150 detected\n\n"
 			read -p "If this is correct, enter y to continue: " -r ans
 			if [ "$ans" = "y" ] || [ "$ans" = "Y" ] ; then
