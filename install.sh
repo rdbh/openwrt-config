@@ -2,7 +2,7 @@
 # Script for setting up a new OpenWRT device
 # wget https://raw.githubusercontent.com/rdbh/openwrt-config/master/setup.sh 
 # Copyright 2020, 2021 Richard Dawson
-# v0.4.0
+# v0.4.1
 
 ## VARIABLES
 # Create a log file with current date and time
@@ -27,8 +27,9 @@ printf "\nTrying to identify this device\n"
 
 	# Determine which device we are operating on
 
-	model="$(grep '"id":' /etc/board.json | awk -F ': ' '{print $NF}' | awk -F '"' '{print $2}')"
-	case $model in
+	MODEL="$(grep '"id":' /etc/board.json | awk -F ': ' '{print $NF}' \
+	| awk -F '"' '{print $2}' | sed 's/glitnet,//')"
+	case $MODEL in
 		"gl-mt1300")
 			printf "\nGL-MT1300 Beryl detected\n\n"
 			read -p "If this is correct, enter y to continue: " -r ans
@@ -37,7 +38,7 @@ printf "\nTrying to identify this device\n"
 			else
 				return
 			fi;;
-		"gl-ar750"|"gl-ar750s"|"glinet,gl-ar750s-nor-nand")
+		"gl-ar750"|"gl-ar750s"|"gl-ar750s-nor-nand")
 			printf "\nGL-AR750 Slate detected\n\n"
 			read -p "If this is correct, enter y to continue: " -r ans
 			if [ "$ans" = "y" ] || [ "$ans" = "Y" ] ; then
@@ -61,7 +62,7 @@ printf "\nTrying to identify this device\n"
 			else
 				return
 			fi;;
-		"gl-usb150"|"glinet,gl-usb150")
+		"gl-usb150")
 			printf "\nGL-USB150 detected\n\n"
 			read -p "If this is correct, enter y to continue: " -r ans
 			if [ "$ans" = "y" ] || [ "$ans" = "Y" ] ; then
@@ -307,7 +308,8 @@ setup_mt1300(){
 
 setup_usb150(){
 	update_opkg
-	install_git
+	echo "USB150 has very limited storage."
+	echo "Only installing nano for config editing"
 	install_nano
 	clean_up
 }
@@ -376,7 +378,7 @@ run_menu(){
 	printf "\n\t\t\t%s" "$imenu"
 	printf "\n"
 	printf "\n\t\t\tx. Exit\n"
-	printf "\n%s\n" "$MSG"
+	printf "\n${MSG}\n"
 	printf "\nSelect by pressing the letter and then ENTER\n\t"
 }
 
