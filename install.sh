@@ -88,7 +88,7 @@ expand_storage(){
 	# Install required software
 	printf "\n\nStep ${STEP} - installing required packages\n"
 	printf "\tRequired for overlay expansion\n"
-	update_opkg
+	opkg update >> $LOG_FILE
 	opkg install block-mount >> $LOG_FILE
 	opkg install kmod-fs-ext4 >> $LOG_FILE
 	opkg install kmod-usb-storage >> $LOG_FILE
