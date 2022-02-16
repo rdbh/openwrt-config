@@ -7,7 +7,7 @@ To use, simply run
   
 Then, execute setup.sh by typing
 ```
-  sh ./setup.sh
+  sh ./install.sh
 ```
 
 Please like, subscribe, and comment.
