@@ -2,7 +2,7 @@
 # Script for setting up a new OpenWRT device
 # wget https://raw.githubusercontent.com/rdbh/openwrt-config/master/setup.sh 
 # Copyright 2020, 2021 Richard Dawson
-# v0.4.2
+# v0.4.3
 
 ## VARIABLES
 # Create a log file with current date and time
@@ -84,6 +84,12 @@ clean_up(){
 	STEP=$((STEP + 1))
 }
 
+debug_echo(){
+  if [[ "${DEBUG}" = 'true' ]]; then
+    printf "\n${1}\n"
+  fi
+}
+
 expand_storage(){
 	# Install required software
 	printf "\n\nStep ${STEP} - installing required packages\n"
@@ -107,6 +113,7 @@ expand_storage(){
 	uci set fstab.rwm.device="${DEVICE}"
 	uci set fstab.rwm.target="/rwm"
 	uci commit fstab
+	debug_echo "recreated fstab"
 	STEP=$((STEP + 1))
 	
 	# get available drives
