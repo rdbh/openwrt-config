@@ -118,12 +118,16 @@ expand_storage(){
 	
 	# get available drives
 	printf "\nDetermine which drive is your expansion drive:\n"
-	MOUNTED_BLOCKS=$(block info)
+	MOUNTED_BLOCKS=$(block info | awk -F ':' '{print $1}')
 	# TODO: make a menu here
 	printf "${MOUNTED_BLOCKS}\n"
 	printf "\nType the name of the device you want to format\n"
 	printf "\tExample for \"/dev/sda1\" type \"sda1\"\n"
+	printf "\n\tPress [ENTER] for default mmcblk0p1\n"
 	read -r MOUNT_DRIVE
+	if [[ "${MOUNT_DRIVE}" = "" ]]; then
+	  MOUNT_DRIVE="mmcblk0p1"
+	fi
 	# Check if storage device is mounted
 	printf "\nChecking to see if the storage device is currently mounted\n\n"
 	#TODO: make this cleaner
