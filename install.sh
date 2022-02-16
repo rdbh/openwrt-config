@@ -87,6 +87,7 @@ clean_up(){
 expand_storage(){
 	# Install required software
 	printf "\n\nStep ${STEP} - installing required packages\n"
+	printf "\tRequired for overlay expansion\n"
 	opkg install block-mount >> $LOG_FILE
 	opkg install kmod-fs-ext4 >> $LOG_FILE
 	opkg install kmod-usb-storage >> $LOG_FILE
@@ -119,7 +120,7 @@ expand_storage(){
 	printf "\nChecking to see if the storage device is currently mounted\n\n"
 	#TODO: make this cleaner
 	set +e
-	umount /mnt/"$MOUNT_DRIVE"
+	umount /mnt/"${MOUNT_DRIVE}"
 		
 	# Format the storage device
 	printf "WARNING: you are about to format /dev/${MOUNT_DRIVE}\n"
@@ -218,20 +219,23 @@ install_python(){
 install_pykms(){
 	printf "\nStep ${STEP} - Installing py-kms\n\n"
 	printf "\n\tStep ${STEP}a - Adding DNS entries\n"
-	uci add dhcp srvhost
-	uci set	dhcp.@srvhost[-1].srv="_vlmcs._tcp"
-	uci set	dhcp.@srvhost[-1].target="console.gl-inet.com"
-	uci set	dhcp.@srvhost[-1].port="1688"
-	uci set	dhcp.@srvhost[-1].class="0"
-	uci set	dhcp.@srvhost[-1].weight="0"
-	uci commit dhcp
-	/etc/init.d/dnsmasq restart
+	if [[ $(grep "_vlmcs._tcp" /etc/config/dhcp) = "" ]]; then
+	  uci add dhcp srvhost
+	  uci set	dhcp.@srvhost[-1].srv="_vlmcs._tcp.lan"
+	  uci set	dhcp.@srvhost[-1].target="console.gl-inet.com"
+	  uci set	dhcp.@srvhost[-1].port="1688"
+	  uci set	dhcp.@srvhost[-1].class="0"
+	  uci set	dhcp.@srvhost[-1].weight="0"
+	  uci commit dhcp
+	  /etc/init.d/dnsmasq restart
+	fi
 	printf "\n\tStep ${STEP}b - Cloning repository\n"
 	git clone git://github.com/radawson/py-kms-1
 	printf "\n\tStep ${STEP}c - Transitioning to py-kms install script\n"
 	cd py-kms-1
 	rm -rf docker
 	sh install.sh
+	update_dns_kms
 	STEP=$((STEP + 1))
 }
 
@@ -261,7 +265,7 @@ pause() {
 }
 
 update_dns_kms(){
-
+  ##TODO: ensure dns resolution directs SRV to current router IP address
 }
 
 update_opkg(){
