@@ -266,6 +266,7 @@ pause() {
 
 update_dns_kms(){
   ##TODO: ensure dns resolution directs SRV to current router IP address
+  printf "/nUpdating DNS entry\n"
 }
 
 update_opkg(){
