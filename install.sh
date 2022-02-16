@@ -38,6 +38,7 @@ printf "\nTrying to identify this device\n"
 			else
 				return
 			fi;;
+
 		"gl-ar750"|"gl-ar750s"|"gl-ar750s-nor-nand")
 			printf "\nGL-AR750 Slate detected\n\n"
 			read -p "If this is correct, enter y to continue: " -r ans
@@ -345,7 +346,7 @@ setup_usb150(){
 _1menu="1.  Install for AR-750 "        			; 
 _2menu="2.  Install for MT-1300 "    			; 
 _3menu="3.  Install for MV-1000 "    			;
-_4menu="4.  Install for MV-1000 "    			;
+_4menu="4.  Install for USB-150 "    			;
 amenu="a.  Automatic Install "                	;
 bmenu="b.  Expand Memory "                 		;
 cmenu="c.  Install KMS Server "                 ;
@@ -429,6 +430,7 @@ do
 		'2') _2pick;;
 		'3') _3pick;;
 		'4') _4pick;;
+
 		h|H) gpick;;
 		a|A) apick;;
 		b|B) bpick;;
