@@ -247,7 +247,7 @@ install_pykms(){
 	printf "\n\tStep ${STEP}c - Transitioning to py-kms install script\n"
 	cd py-kms-1
 	rm -rf docker
-	sh install.sh
+	sh install.sh -o
 	update_dns_kms
 	STEP=$((STEP + 1))
 }
