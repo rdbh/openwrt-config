@@ -213,7 +213,7 @@ install_pykms(){
 	printf "\n\tStep %sb - Transitioning to py-kms install script\n" "$step"
 	cd py-kms-1
 	rm -rf docker
-	sh install.sh
+	sh install.sh -o
 	step=$((step + 1))
 }
 
