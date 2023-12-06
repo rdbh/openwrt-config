@@ -2,7 +2,7 @@
 # Script for setting up a new OpenWRT device
 # wget https://raw.githubusercontent.com/rdbh/openwrt-config/master/setup.sh
 # Copyright 2020, 2021 Richard Dawson
-# v0.5.0
+# v0.5.1
 
 ## VARIABLES
 # Create a log file with current date and time
@@ -363,6 +363,7 @@ setup_usb150() {
 	clean_up
 }
 
+
 #------------------------------------------------------
 # MENU PROMPTS
 #------------------------------------------------------
@@ -377,7 +378,7 @@ cmenu="c.  Install KMS Server "
 dmenu="d.  Force HTTPS ! Deprecated !"
 emenu="e.  Install Utilities "
 fmenu="f.  Install Python 3 "
-gmenu="  "
+gmenu="g.  Configure DNS for KMS "
 hmenu="  "
 imenu="  "
 
@@ -450,6 +451,12 @@ fpick() {
 	install_python
 	pause
 }
+gpick() {
+	step=1
+	update_opkg
+	update_dns_kms
+	pause
+}
 
 #------------------------------------------------------
 # DISPLAY MENU
@@ -512,6 +519,7 @@ while :; do
 	d | D) dpick ;;
 	e | E) epick ;;
 	f | F) fpick ;;
+	g | G) gpick ;;
 
 	x | X) break ;;
 	*) badchoice ;;
