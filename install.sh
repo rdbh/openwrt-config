@@ -2,7 +2,7 @@
 # Script for setting up a new OpenWRT device
 # wget https://raw.githubusercontent.com/rdbh/openwrt-config/master/setup.sh
 # Copyright 2020, 2021 Richard Dawson
-# v0.4.3
+# v0.5.0
 
 ## VARIABLES
 # Create a log file with current date and time
