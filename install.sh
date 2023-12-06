@@ -247,24 +247,12 @@ install_python() {
 
 install_pykms() {
 	printf "\nStep ${STEP} - Installing py-kms\n\n"
-	printf "\n\tStep ${STEP}a - Adding DNS entries\n"
-	if [[ -r /etc/config/dhcp && $(grep "_vlmcs._tcp" /etc/config/dhcp) == "" ]]; then
-		uci add dhcp srvhost
-		uci set dhcp.@srvhost[-1].srv="_vlmcs._tcp.lan"
-		uci set dhcp.@srvhost[-1].target="console.gl-inet.com"
-		uci set dhcp.@srvhost[-1].port="1688"
-		uci set dhcp.@srvhost[-1].class="0"
-		uci set dhcp.@srvhost[-1].weight="0"
-		uci commit dhcp
-		/etc/init.d/dnsmasq restart
-	fi
-	printf "\n\tStep ${STEP}b - Cloning repository\n"
+	printf "\n\tStep ${STEP}a - Cloning repository\n"
 	git clone https://github.com/radawson/py-kms-1
-	printf "\n\tStep ${STEP}c - Transitioning to py-kms install script\n"
+	printf "\n\tStep ${STEP}b - Transitioning to py-kms install script\n"
 	cd py-kms-1
 	rm -rf docker
 	sh install.sh -o
-	update_dns_kms
 	STEP=$((STEP + 1))
 }
 
@@ -294,8 +282,17 @@ pause() {
 }
 
 update_dns_kms() {
-	##TODO: ensure dns resolution directs SRV to current router IP address
-	printf "/nUpdating DNS entry\n"
+	printf "\n\tStep ${STEP} - Adding DNS entries for KMS\n"
+	if [[ -r /etc/config/dhcp && $(grep "_vlmcs._tcp" /etc/config/dhcp) == "" ]]; then
+		uci add dhcp srvhost
+		uci set dhcp.@srvhost[-1].srv="_vlmcs._tcp.lan"
+		uci set dhcp.@srvhost[-1].target="console.gl-inet.com"
+		uci set dhcp.@srvhost[-1].port="1688"
+		uci set dhcp.@srvhost[-1].class="0"
+		uci set dhcp.@srvhost[-1].weight="0"
+		uci commit dhcp
+		/etc/init.d/dnsmasq restart
+	fi
 }
 
 update_opkg() {
@@ -326,7 +323,7 @@ setup_ax1800() {
 	install_nano
 	install_python
 	install_pykms
-	install_usb3
+	update_dns_kms
 	clean_up
 }
 
