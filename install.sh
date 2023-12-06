@@ -283,7 +283,7 @@ pause() {
 
 update_dns_kms() {
 	printf "\n\tStep ${STEP} - Adding DNS entries for KMS\n"
-	if [[ -r /etc/config/dhcp && $(grep "_vlmcs._tcp" /etc/config/dhcp) == "" ]]; then
+	if [[ -r /etc/config/dhcp && -z $(grep "_vlmcs._tcp" /etc/config/dhcp) ]]; then
 		uci add dhcp srvhost
 		uci set dhcp.@srvhost[-1].srv="_vlmcs._tcp.lan"
 		uci set dhcp.@srvhost[-1].target="console.gl-inet.com"
