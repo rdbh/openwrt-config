@@ -259,7 +259,7 @@ install_pykms() {
 		/etc/init.d/dnsmasq restart
 	fi
 	printf "\n\tStep ${STEP}b - Cloning repository\n"
-	git clone git://github.com/radawson/py-kms-1
+	git clone https://github.com/radawson/py-kms-1
 	printf "\n\tStep ${STEP}c - Transitioning to py-kms install script\n"
 	cd py-kms-1
 	rm -rf docker
