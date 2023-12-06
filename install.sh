@@ -248,7 +248,7 @@ install_python() {
 install_pykms() {
 	printf "\nStep ${STEP} - Installing py-kms\n\n"
 	printf "\n\tStep ${STEP}a - Adding DNS entries\n"
-	if [[ $(grep "_vlmcs._tcp" /etc/config/dhcp) = "" ]]; then
+	if [[ -r /etc/config/dhcp && $(grep "_vlmcs._tcp" /etc/config/dhcp) == "" ]]; then
 		uci add dhcp srvhost
 		uci set dhcp.@srvhost[-1].srv="_vlmcs._tcp.lan"
 		uci set dhcp.@srvhost[-1].target="console.gl-inet.com"
